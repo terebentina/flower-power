@@ -1,5 +1,5 @@
 # flower-power
-Tessel 1 code for monitoring ambient data.
+Tessel 1 code for monitoring ambient data. This uses the climate module and a moisture sensor.
 
 The code is specific to my setup but it's short enough to be readable and easily changeable.
 
