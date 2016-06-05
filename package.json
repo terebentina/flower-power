@@ -11,9 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/terebentina/flower-power.git"
   },
-  "keywords": [],
+  "keywords": ["tessel", "climate", "moisture"],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/terebentina/flower-power/issues"
   },
