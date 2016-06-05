@@ -1,0 +1,21 @@
+{
+  "name": "flower-power",
+  "version": "1.0.0",
+  "description": "Tessel 1 code for monitoring ambient data",
+  "main": "server.js",
+  "dependencies": {
+    "climate-si7020": "^0.1.0",
+    "httpdispatcher": "^1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/terebentina/flower-power.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/terebentina/flower-power/issues"
+  },
+  "homepage": "https://github.com/terebentina/flower-power#readme"
+}
