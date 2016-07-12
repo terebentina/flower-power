@@ -14,7 +14,7 @@ module.exports = (ctx, cb) => {
 			if (err) {
 				return cb(err);
 			}
-			cb(null, 'Sensor data saved, current data:' + JSON.stringify(newData));
+			cb(null, `Sensor data saved, current data: ${JSON.stringify(newData)}`);
 		});
 	});
 };
