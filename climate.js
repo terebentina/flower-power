@@ -1,6 +1,6 @@
 var tessel = require('tessel');
 var climatelib = require('climate-si7020');
-var http = require('http');
+var https = require('https');
 
 var climate = climatelib.use(tessel.port['D']);
 
@@ -31,19 +31,9 @@ function convertMoistureValue(value) {
 }
 
 var sendData = function(temp, humid, moisture) {
-	var postData = 'temp=' + temp + '&humidity=' + humid + '&moisture=' + moisture;
-	var options = {
-		hostname: '192.168.5.104',
-		port: 8001,
-		path: '/greenhouse',
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded',
-			'Content-Length': postData.length
-		}
-	};
+	var queryData = 'temp=' + temp + '&humidity=' + humid + '&moisture=' + moisture;
 
-	var req = http.request(options, function(res) {
+	https.get('https://webtask.it.auth0.com/api/run/wt-dancaragea-gmail_com-0/webtask?webtask_no_cache=1&' + queryData, function(res) {
 		// console.log('STATUS:', res.statusCode);
 		// console.log('HEADERS:', JSON.stringify(res.headers));
 		res.setEncoding('utf8');
@@ -54,9 +44,6 @@ var sendData = function(temp, humid, moisture) {
 			console.log('No more data in response.')
 		});
 	});
-
-	req.write(postData);
-	req.end();
 };
 
 climate.on('ready', function () {
