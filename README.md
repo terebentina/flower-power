@@ -9,9 +9,15 @@ Run `npm i`
 
 ## Description
 
-`climate.js` must be pushed on tessel. It reads data from sensors and sends it to a server on `192.168.5.104:8001` every 10 minutes.
+`climate.js` must be pushed on tessel. It reads data from sensors and sends it to a webtask every 10 minutes (no server involved).
 
-`server.js` is the server which does nothing else but display the date when it received the data along with the data it received. Start the server with `npm start`.
+Before running the code you must register your task with http://webtask.io and ammend the link in https://github.com/terebentina/flower-power/blob/webtask/climate.js#L36
+Registration is a simple matter of installing the wt tool, confirming your email/phone and registering:
+```
+npm i -g wt-cli
+wt init
+wt create webtask.js
+```
 
 The climate module is connected on port `D` on tessel to keep it away from a heat source (tessel itself). Better connect the module via cables or a breadboard.
 
