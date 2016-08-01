@@ -11,7 +11,7 @@ Run `npm i`
 
 `climate.js` must be pushed on tessel. It reads data from sensors and sends it to a webtask every 10 minutes (no server involved).
 
-Before running the code you must register your task with http://webtask.io and ammend the link in https://github.com/terebentina/flower-power/blob/webtask/climate.js#L36
+Before running the code you must register your task with http://webtask.io and ammend the link in https://github.com/terebentina/flower-power/blob/webtask/climate.js#L38
 Registration is a simple matter of installing the wt tool, confirming your email/phone and registering:
 ```
 npm i -g wt-cli

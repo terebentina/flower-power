@@ -18,58 +18,70 @@ moisturePowerPin.output(0);
 var moistureReadPin = tessel.port['GPIO'].analog[0];
 
 function convertMoistureValue(value) {
-	if (value < WET) {
-		return 100;
-	}
-	if (value > DRY) {
-		return 0;
-	}
+  if (value < WET) {
+    return 100;
+  }
+  if (value > DRY) {
+    return 0;
+  }
 
-	value = value - WET;
+  value = value - WET;
 
-	return Math.round(100 - (value * 100 / zeroDry));
+  return Math.round(100 - (value * 100 / zeroDry));
 }
 
 var sendData = function(temp, humid, moisture) {
-	var queryData = 'temp=' + temp + '&humidity=' + humid + '&moisture=' + moisture;
+  var postData = 'temp=' + temp + '&humidity=' + humid + '&moisture=' + moisture;
+  var options = {
+    hostname: 'webtask.it.auth0.com',
+    port: 443,
+    path: '/api/run/wt-dancaragea-gmail_com-0/webtask/write?webtask_no_cache=1',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': postData.length
+    }
+  };
 
-	https.get('https://webtask.it.auth0.com/api/run/wt-dancaragea-gmail_com-0/webtask?webtask_no_cache=1&' + queryData, function(res) {
-		// console.log('STATUS:', res.statusCode);
-		// console.log('HEADERS:', JSON.stringify(res.headers));
-		res.setEncoding('utf8');
-		res.on('data', function(chunk) {
-			console.log('BODY:', chunk);
-		});
-		res.on('end', function() {
-			console.log('No more data in response.')
-		});
-	});
+  var req = https.request(options, function(res) {
+    // console.log('STATUS:', res.statusCode);
+    // console.log('HEADERS:', JSON.stringify(res.headers));
+    res.setEncoding('utf8');
+    res.on('data', function(chunk) {
+      console.log('BODY:', chunk);
+    });
+    res.on('end', function() {
+      console.log('No more data in response.');
+    });
+  });
+
+  req.write(postData);
+  req.end();
 };
 
-climate.on('ready', function () {
-	console.log('Connected to si7020');
+climate.on('ready', function() {
+  console.log('Connected to si7020');
 
-	// Loop forever
-	setImmediate(function loop () {
-		climate.readTemperature('c', function (err, temp) {
-			climate.readHumidity(function (err, humid) {
-				moisturePowerPin.output(1);
-				setTimeout(function() {
-					var moisture = convertMoistureValue(Math.round(moistureReadPin.read() * 10000));
-					moisturePowerPin.output(0);
-					console.log('Degrees:', temp.toFixed(2) + 'C', 'Humidity:', humid.toFixed(2) + ' %RH', 'Moisture:', moisture);
+  // Loop forever
+  setImmediate(function loop () {
+    climate.readTemperature('c', function (err, temp) {
+      climate.readHumidity(function (err, humid) {
+        moisturePowerPin.output(1);
+        setTimeout(function() {
+          var moisture = convertMoistureValue(Math.round(moistureReadPin.read() * 10000));
+          moisturePowerPin.output(0);
+          console.log('Degrees:', temp.toFixed(2) + 'C', 'Humidity:', humid.toFixed(2) + ' %RH', 'Moisture:', moisture);
 
-					sendData(temp.toFixed(2), humid.toFixed(2), moisture);
+          sendData(temp.toFixed(2), humid.toFixed(2), moisture);
 
-					setTimeout(loop, 600000);	// every 10 mins
-					// setTimeout(loop, 3000);	// every 3 seconds
-				}, 2000);
-
-			});
-		});
-	});
+          setTimeout(loop, 600000);  // every 10 mins
+          // setTimeout(loop, 3000);  // every 3 seconds
+        }, 2000);
+      });
+    });
+  });
 });
 
 climate.on('error', function(err) {
-	console.log('error connecting module', err);
+  console.log('error connecting module', err);
 });
