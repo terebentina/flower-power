@@ -6,7 +6,7 @@ function sendResponse(res, code, message) {
   res.end(JSON.stringify({ statusCode: code, message }));
 }
 
-const write = (req, res) => {
+app.post('/write', (req, res) => {
   req.webtaskContext.storage.get((error, data) => {
     if (error) {
       sendResponse(res, 400, error);
@@ -26,10 +26,7 @@ const write = (req, res) => {
       sendResponse(res, 200, 'Sensor data saved');
     });
   });
-};
-
-app.post('/write', write);
-app.get('/write', write);
+});
 
 app.get('/read', (req, res) => {
   req.webtaskContext.storage.get((error, data) => {
